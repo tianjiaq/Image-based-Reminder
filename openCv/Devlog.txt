@@ -4,7 +4,7 @@ Zhiwen
 1.helloworld for testing the opencv and python2.7 environment
   It loads an color image and save it as BW
   
-2.cat detector for finding the cat inside the image
+2.cat detector for finding the cat inside the image, still tuning the variables and try to understand the progress
   It uses opencv build-in xml (haarcascade_frontalcatface)
   
   command: $ python cat_detector.py --image images/cat1.jpg
