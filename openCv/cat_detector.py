@@ -17,9 +17,10 @@ gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
  
 # load the cat detector Haar cascade, then detect cat faces
 # in the input image
+#scalefactor >=1
 detector = cv2.CascadeClassifier(args["cascade"])
-rects = detector.detectMultiScale(gray, scaleFactor=1.3,
-	minNeighbors=10, minSize=(75, 75))
+rects = detector.detectMultiScale(gray, scaleFactor=1.1,
+	minNeighbors=5, minSize=(100, 100))
 
 # loop over the cat faces and draw a rectangle surrounding each
 for (i, (x, y, w, h)) in enumerate(rects):
