@@ -1,1 +1,15 @@
-...
+Nov 1th
+Zhiwen
+
+1.helloworld for testing the opencv and python2.7 environment
+  It loads an color image and save it as BW
+  
+2.cat detector for finding the cat inside the image
+  It uses opencv build-in xml (haarcascade_frontalcatface)
+  
+  command: $ python cat_detector.py --image images/cat1.jpg
+  useful resource:https://www.pyimagesearch.com/2016/06/20/detecting-cats-in-images-with-opencv/
+  
+****************************************************************************************************
+
+
