@@ -70,10 +70,10 @@ def fine_tuning():
 	# and train the remaining top layers.
 
 
-	batch_size=16
-	nb_epoch=10
+	batch_size=32
+	nb_epoch=15
 
-
+        model.summary()
 
 	model.fit(trainX, trainY,
               batch_size=batch_size,
@@ -101,7 +101,8 @@ def fine_tuning():
               verbose=1,
               validation_data=(testX, testY),
               )
-	print("[INFO] serializing network...")
+	model.evaluate(testX,testY)
+        print("[INFO] serializing network...")
 	model.save("inception.model")
 	# we train our model again (this time fine-tuning the top 2 inception blocks
 	# alongside the top Dense layers

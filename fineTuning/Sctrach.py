@@ -1,19 +1,16 @@
 import numpy as np
 import matplotlib.pyplot as plt
-%matplotlib inline
 
 import keras
 from keras.models import Sequential
 from keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten
 from keras.utils import to_categorical
 from sklearn.model_selection import train_test_split
-
-
-
+from utils import LoadImages
 def createModel(nClasses):
     model = Sequential()
     # The first two layers with 32 filters of window size 3x3
-    model.add(Conv2D(32, (3, 3), padding='same', activation='relu', input_shape=(224,224,3)))
+    model.add(Conv2D(32, (3, 3), padding='same', activation='relu', input_shape=(128,128,3)))
     model.add(Conv2D(32, (3, 3), activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.25))
@@ -37,7 +34,7 @@ def createModel(nClasses):
 
 
 #Create Dataset
-(data,labels,CategoryMapping)=LoadImages("/nfs/ug/homes-0/y/yangze3/Image-based-Reminder/images",224,224)
+(data,labels,CategoryMapping)=LoadImages("/nfs/ug/homes-0/y/yangze3/Image-based-Reminder/images",128,128)
 	# scale the raw pixel intensities to the range [0, 1]
 data = np.array(data, dtype="float") / 255.0
 labels = np.array(labels)
@@ -49,8 +46,6 @@ NumberOfClass=len(CategoryMapping)
 trainY = to_categorical(trainY, num_classes=NumberOfClass)
 testY = to_categorical(testY, num_classes=NumberOfClass)
 
-train_labels_one_hot = to_categorical(trainY)
-test_labels_one_hot = to_categorical(testY)
 
 
 
@@ -61,11 +56,11 @@ model1.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['a
 
 model1.summary()
 
-history = model1.fit(trainX, train_labels_one_hot, batch_size=batch_size, epochs=epochs, verbose=1, 
-                   validation_data=(testX, test_labels_one_hot))
-model1.evaluate(test_data, test_labels_one_hot)
+result = model1.fit(trainX, trainY, batch_size=batch_size, epochs=epochs, verbose=1, 
+                   validation_data=(testX, testY))
+model1.evaluate(testX,testY)
 print("[INFO] serializing network...")
-model.save("Sctrach.model")
+model1.save("Sctrach.model")
 
 plt.style.use("ggplot")
 plt.figure()
