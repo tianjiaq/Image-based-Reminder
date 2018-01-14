@@ -20,6 +20,10 @@ def fine_tuning():
 	(data,labels,CategoryMapping)=LoadImages("/Users/zeyang/Documents/GitHub/Image-based-Reminder-group/images",299,299)
 	# scale the raw pixel intensities to the range [0, 1]
 	data = np.array(data, dtype="float") / 255.0
+	data-=0.5
+	data*= 2.
+
+
 	labels = np.array(labels)
 	np.save('CategoryMapping.npy', CategoryMapping) 
 	#Get the Category Numbers
@@ -65,10 +69,7 @@ def fine_tuning():
 	# convolutional layers from inception V3. We will freeze the bottom N layers
 	# and train the remaining top layers.
 
-	# let's visualize layer names and layer indices to see how many layers
-	# we should freeze:
-	for i, layer in enumerate(base_model.layers):
-	   print(i, layer.name)
+
 	batch_size=32
 	nb_epoch=50
 	model.fit(trainX, trainY,
