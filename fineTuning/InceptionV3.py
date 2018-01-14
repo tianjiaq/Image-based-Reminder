@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 
 def fine_tuning():
 	#Load Data
-	(data,labels,CategoryMapping)=LoadImages("/Users/zeyang/Documents/GitHub/Image-based-Reminder-group/images",299,299)
+	(data,labels,CategoryMapping)=LoadImages("/nfs/ug/homes-0/y/yangze3/Image-based-Reminder/images",299,299)
 	# scale the raw pixel intensities to the range [0, 1]
 	data = np.array(data, dtype="float") / 255.0
 	labels = np.array(labels)
@@ -67,10 +67,10 @@ def fine_tuning():
 
 	# let's visualize layer names and layer indices to see how many layers
 	# we should freeze:
-	for i, layer in enumerate(base_model.layers):
-	   print(i, layer.name)
-	batch_size=32
-	nb_epoch=50
+	#for i, layer in enumerate(base_model.layers):
+	 #  print(i, layer.name)
+	batch_size=16
+	nb_epoch=10
 	model.fit(trainX, trainY,
               batch_size=batch_size,
               epochs=nb_epoch,
