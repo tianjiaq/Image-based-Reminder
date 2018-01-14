@@ -5,25 +5,39 @@ import os
 from keras.preprocessing.image import img_to_array
 import random
 
-def Category_To_Int(label):
-	if label =="yellow_banana":
-		result=0
-	elif label=="tomato":
-		result=1
-	elif label=="pumpkin":
-		result=2
-	return result
+def Category_To_Int(CategoryAndLabel,label):
+	return CategoryAndLabel[label]
+
+def Listdir_not_Hidden(path):
+	Category=[]
+	for f in os.listdir(path):
+		if not f.startswith('.'):
+			Category.append(f)
+	return Category 
+
+def GetCategoryAndLabel(base_path): 
+	CategoryAndLabel={}
+	for index,item in enumerate(Listdir_not_Hidden(base_path)):
+		CategoryAndLabel[item]=index
+	return CategoryAndLabel
+
+def GetLabelAndCategory(Category):
+	LabelAndCategoryMapping={}
+	for key, value in Category.items():
+	 	LabelAndCategoryMapping[value]=key
+	return LabelAndCategoryMapping
+	 	
 
 
 
 def LoadImages(TrainDatatDir,ImgWidth,ImgHeight,TestDataDir=None):
 	"""
 	Input Parameter: Given TrainDatatDir and TestDataDir
-	Output Parameter: List (X_Train,Y_Train,X_Test，Y_Test) 
+	Output Parameter: List (X_Train,Y_Train,Category) 
 	Description:
 	The function will take the folder name as the label Name and pre-processing the input image based on the input dimension	
 	"""
-
+	Category= GetCategoryAndLabel(TrainDatatDir)
 	TrainImagePaths = sorted(list(paths.list_images(TrainDatatDir)))
 	random.seed(42)
 	random.shuffle(TrainImagePaths)
@@ -36,13 +50,13 @@ def LoadImages(TrainDatatDir,ImgWidth,ImgHeight,TestDataDir=None):
 		TrainData.append(image)
 		label = imagePath.split(os.path.sep)[-2]
 		#print("Path is "+imagePath +"label is "+label)
-
-		TrainLabel.append(Category_To_Int(label))
+		Label_index=Category_To_Int(Category,label)
+		TrainLabel.append(Label_index)
 
 
 	if TestDataDir==None:
 		print ("No TrainData")
-		return (TrainData,TrainLabel)
+		return (TrainData,TrainLabel,Category)
 	
 	TestData=[]
 	TestLabel=[]
@@ -59,7 +73,7 @@ def LoadImages(TrainDatatDir,ImgWidth,ImgHeight,TestDataDir=None):
 
 	return (TrainData,TrainLabel,TestData,TestLabel)
 
-LoadImages("/Users/zeyang/Documents/GitHub/Image-based-Reminder-group/images",ImgWidth=24,ImgHeight=24)
+LoadImages("/Users/zeyang/Documents/GitHub/Image-based-Reminder-group/images",1,1)
 
 
 
