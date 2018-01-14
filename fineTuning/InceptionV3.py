@@ -16,6 +16,16 @@ import matplotlib.pyplot as plt
 
 
 def fine_tuning():
+	#Load Data
+	(data,labels,CategoryMapping)=LoadImages("/Users/zeyang/Documents/GitHub/Image-based-Reminder-group/images",299,299)
+	# scale the raw pixel intensities to the range [0, 1]
+	data = np.array(data, dtype="float") / 255.0
+	labels = np.array(labels)
+	np.save('CategoryMapping.npy', CategoryMapping) 
+	#Get the Category Numbers
+	NumberOfClass=len(CategoryMapping)
+
+	print (NumberOfClass)
 
 	# create the base pre-trained model
 	base_model = InceptionV3(weights='imagenet', include_top=False)
@@ -26,7 +36,7 @@ def fine_tuning():
 	# let's add a fully-connected layer
 	x = Dense(1024, activation='relu')(x)
 	# and a logistic layer -- let's say we have 200 classes
-	predictions = Dense(3, activation='softmax')(x)
+	predictions = Dense(NumberOfClass, activation='softmax')(x)
 
 	# this is the model we will train
 	model = Model(inputs=base_model.input, outputs=predictions)
@@ -39,21 +49,15 @@ def fine_tuning():
 	# compile the model (should be done *after* setting layers to non-trainable)
 	model.compile(optimizer='rmsprop', loss='categorical_crossentropy')
 
-	#Load Data
-	(data,labels)=LoadImages("/Users/zeyang/Documents/GitHub/Image-based-Reminder-group/images",224,224)
-	# scale the raw pixel intensities to the range [0, 1]
-	data = np.array(data, dtype="float") / 255.0
-	labels = np.array(labels)
-	 
+
 # partition the data into training and testing splits using 75% of
 # the data for training and the remaining 25% for testing
 	(trainX, testX, trainY, testY) = train_test_split(data,
 	labels, test_size=0.25, random_state=42)
 
-
 	# convert the labels from integers to vectors
-	trainY = to_categorical(trainY, num_classes=3)
-	testY = to_categorical(testY, num_classes=3)
+	trainY = to_categorical(trainY, num_classes=NumberOfClass)
+	testY = to_categorical(testY, num_classes=NumberOfClass)
 	# train the model on the new data for a few epochs
 	#model.fit_generator()
 
@@ -65,11 +69,11 @@ def fine_tuning():
 	# we should freeze:
 	for i, layer in enumerate(base_model.layers):
 	   print(i, layer.name)
-	batch_size=16
-	nb_epoch=10
+	batch_size=32
+	nb_epoch=50
 	model.fit(trainX, trainY,
               batch_size=batch_size,
-              nb_epoch=nb_epoch,
+              epochs=nb_epoch,
               shuffle=True,
               verbose=1,
               validation_data=(testX, testY),
@@ -88,7 +92,7 @@ def fine_tuning():
 	model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy',metrics=["accuracy"])
 	result= model.fit(trainX, trainY,
               batch_size=batch_size,
-              nb_epoch=nb_epoch,
+              epochs=nb_epoch,
               shuffle=True,
               verbose=1,
               validation_data=(testX, testY),
