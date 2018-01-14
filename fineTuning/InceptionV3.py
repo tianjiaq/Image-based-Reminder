@@ -116,7 +116,7 @@ def fine_tuning():
 	plt.plot(np.arange(0, N), result.history["val_loss"], label="val_loss")
 	plt.plot(np.arange(0, N), result.history["acc"], label="train_acc")
 	plt.plot(np.arange(0, N), result.history["val_acc"], label="val_acc")
-	plt.title("Training Loss and Accuracy on Santa/Not Santa")
+	plt.title("Training Loss and Accuracy on InceptionV3")
 	plt.xlabel("Epoch #")
 	plt.ylabel("Loss/Accuracy")
 	plt.legend(loc="lower left")

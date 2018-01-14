@@ -73,7 +73,7 @@ def LoadImages(TrainDatatDir,ImgWidth,ImgHeight,TestDataDir=None):
 
 	return (TrainData,TrainLabel,TestData,TestLabel)
 
-LoadImages("/nfs/ug/homes-0/y/yangze3/Image-based-Reminder/images",1,1)
+#LoadImages("/nfs/ug/homes-0/y/yangze3/Image-based-Reminder/images",1,1)
 
 
 
